@@ -1,6 +1,8 @@
 MiniTube YouTube Frontend and Downloader
 ================
 
+> *Keep in mind, it was made quickly in an "afternoon" coding session, that's why the code is super-minimal. It's part of a project where I slowly de-Google my life (not using a Google account).*
+
 A simple PHP-based frontend for browsing YouTube videos from your subscribed, categorized channels. It allows you to download videos as MP3 files. Generates an RSS feed from these mp3s for podcast apps - for example Apple Podcasts.
 
 Compatible with PocketTube Chrome extension for managing YouTube subscriptions and categories.
