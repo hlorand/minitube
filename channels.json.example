@@ -1,0 +1,10 @@
+{
+  "category1": [
+    "channelNameOrId1", 
+    "channelNameOrId2"
+  ],
+  "category2": [
+    "channelNameOrId3", 
+    "channelNameOrId4"
+    ]
+}

@@ -1,0 +1,5 @@
+cache/
+downloads/
+*.log
+*.json
+yt-dlp*

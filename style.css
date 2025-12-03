@@ -1,0 +1,61 @@
+:root{
+    --bgcolor: rgba(32,0,64,1);
+    --bgcolortr: rgba(64,0,128,0.3);
+    --linkcolor: rgba(128, 0, 255, 1);
+    --gaps: 5px;
+}
+*:not(a,html,body,svg,span){
+    border-radius: 6px;
+    background-color: var(--bgcolortr);
+    padding: var(--gaps);
+    margin: var(--gaps);
+    box-sizing: border-box;
+}
+body{
+    font-family: sans-serif;
+    background-color: black;
+    color: #bbb;
+}
+button{
+    background-color: var(--linkcolor);
+    border: none;
+    padding: calc( var(--gaps) * 2 );
+    cursor: pointer;
+}
+a{ 
+    text-decoration: none; 
+    color: var(--linkcolor) !important; 
+}
+.video-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(0, min(350px, 100%)));
+    justify-content: center;
+    gap: calc( var(--gaps) * 2 );
+}
+.video-entry{
+    position: relative;
+}
+.video-date, .video-channel{
+    position: absolute;
+    background-color: var(--bgcolor);
+    top: calc( var(--gaps) * 2 );   
+    font-size: small;
+}
+.video-date{
+    left: calc( var(--gaps) * 2 );
+}
+.video-channel{
+    right: calc( var(--gaps) * 2 );
+}
+.video-thumbnail{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.video-title{
+    font-size: large;
+}
+.video-description{
+    font-size: x-small;
+    color: #666;
+}
