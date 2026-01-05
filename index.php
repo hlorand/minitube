@@ -46,15 +46,18 @@ if ( !$channels )
     </div>
 
     <div class='video-grid'>
-    <?php foreach ($videofeed as $video): ?>
+    <?php 
+    foreach ($videofeed as $video): 
+        if( HIDE_SHORTS && $video->isshort ) continue; 
+    ?>
         <div class='video-entry category-<?= $video->category ?>'>
-            <a href='https://www.youtube.com/watch?v=<?= $video->videoId ?>' target='_blank'>
-                <img class='video-thumbnail' src='https://img.youtube.com/vi/<?= $video->videoId ?>/mqdefault.jpg' loading='lazy'>
+            <a href='https://www.youtube.com/watch?v=<?= $video->videoid ?>' target='_blank'>
+                <img class='video-thumbnail' src='https://img.youtube.com/vi/<?= $video->videoid ?>/mqdefault.jpg' loading='lazy'>
                 <div class='video-date'><?= (new DateTime($video->publishdate))->format('m-d H:i') ?></div>
                 <div class='video-channel'><a href='https://youtube.com/channel/<?= $video->channelid ?>' target='_blank'><?= ucfirst(htmlspecialchars($video->channelname)) ?></a></div>
             </a>
             <div class='video-title'><?= htmlspecialchars($video->title) ?></div>
-            <a href='./download.php?video=https://youtube.com/watch?v=<?= $video->videoId ?>' target='_blank'><button>⏬ Download</button></a>
+            <a href='./download.php?video=https://youtube.com/watch?v=<?= $video->videoid ?>' target='_blank'><button>⏬ Download</button></a>
         </div>
     <?php endforeach; ?>
     </div>

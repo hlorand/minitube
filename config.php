@@ -11,6 +11,9 @@ define('UPDATE_ONLY_CATEGORIES', []);
 // skip videos older than this many days
 define('SKIP_OLDER_THAN_DAYS', 3);
 
+// hide short videos?
+define('HIDE_SHORTS', true);
+
 // ---------------
 
 // automatically generated video feed file by update.php, read by index.php

@@ -7,16 +7,32 @@ $channels = json_decode(file_get_contents(CHANNELS_FILE), true);
 if ( !$channels )
     die("Error loading " . CHANNELS_FILE . " channel list.");
 
+function isShort($id) {
+    $ch = curl_init("https://www.youtube.com/shorts/$id");
+    curl_setopt_array($ch, [
+        CURLOPT_NOBODY => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => false,
+        CURLOPT_TIMEOUT => 3,        // 1 sec total timeout
+        CURLOPT_CONNECTTIMEOUT => 3  // 1 sec connect timeout
+    ]);
+    curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return $code === 200;
+}
+
 $videofeed = [];
 
 class YouTubeVideo {
     public $title;
-    public $videoId;
+    public $videoid;
     public $publishdate;
     public $description;
     public $category;
     public $channelname;
     public $channelid;
+    public $isshort;
 }
 
 // Downloads a single channel feed with caching
@@ -43,17 +59,19 @@ function fetchWithCache(string $channel) {
 }
 
 foreach ($channels as $category => $channelList) {
+
+	// skip pockettube entries
+	if( str_starts_with($category, "ysc_") ) 
+		continue;
+	
 	log_action("Category: " . $category . " - processing " . count($channelList) . " channels");
 
 	// update only select categories
 	if( UPDATE_ONLY_CATEGORIES == [] || UPDATE_ONLY_CATEGORIES != [] && in_array($category, UPDATE_ONLY_CATEGORIES) )
 	
-	// skip pockettube entries
-	if( !str_starts_with($category, "ysc_") )
-
 		foreach ($channelList as $channel) {
 			log_action($channel . " - fetching feed");
-			
+
 			$xmlContent = fetchWithCache($channel);
 			if ($xmlContent === FALSE) {
 				log_action($channel . " - cannot fetch, skipped");
@@ -66,6 +84,7 @@ foreach ($channels as $category => $channelList) {
 				continue;
 			}
 
+
 			foreach ($xml->entry as $entry) {
 
 				// skip if old
@@ -75,22 +94,23 @@ foreach ($channels as $category => $channelList) {
 					continue;
 
 				$video = new YouTubeVideo();
-				$video->videoId = str_replace("yt:video:", "", (string)$entry->id);
+				$video->videoid = str_replace("yt:video:", "", (string)$entry->id);
 				$video->title = (string)$entry->title;
 				$video->publishdate = (string)$entry->published;
 				$video->description = (string)$entry->children('media', true)->group->description;
 				$video->category = $category;
 				$video->channelname = (string)$xml->author->name;
 				$video->channelid = $channel;
+				$video->isshort = isShort($video->videoid);
 
 				$videofeed[] = $video;
 			}
 		}
 }
 
-// remove duplicates by videoId
+// remove duplicates by videoid
 $videofeed = array_values(array_reduce($videofeed, function ($carry, $item) {
-	$carry[$item->videoId] = $item;
+	$carry[$item->videoid] = $item;
 	return $carry;
 }, []));
 
