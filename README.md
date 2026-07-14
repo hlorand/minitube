@@ -15,7 +15,9 @@ Setup
 0. You need a LAMP server, and these packages installed:
    - FFmpeg
    - python 3.10+
+   - quickjs
    - (yt-dlp automamtically downloaded by the script)
+   - `sudo apt update && sudo apt install ffmpeg python3 quickjs -y`
 1. Clone or copy this repository to your server.
 2. Read and adjust the configuration in `config.php`.
 3. Set up a cron job (`sudo crontab -e`) to run `update.php` periodically (e.g. every hour) to fetch new videos.
@@ -23,6 +25,8 @@ Setup
 ```bash
 0 * * * * /usr/bin/php /var/www/path_to_minitube/update.php
 ```
+
+If the download is not working (check `yt-dlp.log`), [export your YouTube cookies](https://addons.mozilla.org/hu/firefox/addon/cookies-txt/) and place them in a file named `cookies.txt` in the root folder.
 
 How to manage Subscriptions?
 ----------------------------
