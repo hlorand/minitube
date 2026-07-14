@@ -51,7 +51,7 @@ if (isset($_GET['video'])) {
     // validate URL format with built in and regex (for youtube domain)
     if (filter_var($youtubeUrl, FILTER_VALIDATE_URL) && preg_match('/^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=.+$/', $youtubeUrl) ) {
         $escapedUrl = escapeshellarg($youtubeUrl);
-        $command = "nohup python3.10 ./yt-dlp -x --audio-format mp3 --audio-quality 9 --postprocessor-args \"-ac 1 -b:a 16k\" -o \"" . DOWNLOADS_DIR . "/%(title)s.%(ext)s\" $escapedUrl > yt-dlp.log 2>&1 &";
+        $command = "nohup python3 ./yt-dlp -x --cookies cookies.txt --js-runtime quickjs --audio-format mp3 --audio-quality 9 --postprocessor-args \"ffmpeg:-ac 1 -b:a 16k\" -o \"" . DOWNLOADS_DIR . "/%(title)s.%(ext)s\" $escapedUrl > yt-dlp.log 2>&1 &";
         exec($command);
         log_action("Download: $youtubeUrl Command: $command");
         echo "Download started asynchronously for the given URL.";
